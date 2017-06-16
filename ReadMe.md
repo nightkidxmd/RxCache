@@ -13,7 +13,7 @@ public class App extends Application {
 ### 2. 使用
 ```
         RxCacheLoaderHelper.getInstance()
-          .loadFromMemoryFirst(this,"http://proj.tuxiaobao.me:8000/xbot/v1/audio/categorylist?type=podcast", SongCategoriesResponse.class)
+          .loadFromMemoryFirst(this,"xxxx", SongCategoriesResponse.class)
           .subscribe(new Subscriber<SongCategoriesResponse>() {
             @Override
             public void onCompleted() {
