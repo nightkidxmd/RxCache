@@ -1,19 +1,30 @@
 ## RxCacheLoaderHelper
 ### 1. 初始化
-```
+java:
+```java
 public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        RxCacheLoaderHelper.getInstance().init(getApplicationContext());
+        RxCacheLoaderHelper.INSTANCE.init(getApplicationContext());
 
     }
 }
 ```
-### 2. 使用
+kotlin:
+```kotlin
+class App : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        RxCacheLoaderHelper.init(getApplicationContext())
+    }
+}
 ```
-        RxCacheLoaderHelper.getInstance()
-          .loadFromMemoryFirst(this,"xxxx", SongCategoriesResponse.class)
+### 2. 使用
+java:
+```java
+        RxCacheLoaderHelper.INSTANCE
+          .loadFromMemoryFirst(this,"http://xxxx", SongCategoriesResponse.class)
           .subscribe(new Subscriber<SongCategoriesResponse>() {
             @Override
             public void onCompleted() {
@@ -31,6 +42,25 @@ public class App extends Application {
                 Log.d("DADA","songCategoriesResponse:"+songCategoriesResponse);
             }
         });
+```
+kotlin:
+```kotlin
+        RxCacheLoaderHelper
+                .loadFromMemoryFirst(this, "http://xxxxx", SongCategoriesResponse::class.java)
+                .subscribe(object:Subscriber<SongCategoriesResponse>(){
+                    override fun onCompleted() {
+                        Log.d("DADA","onCompleted")
+                    }
+
+                    override fun onError(e: Throwable?) {
+                        e?.printStackTrace()
+                        Log.d("DADA","onError:"+e?.message)
+                    }
+
+                    override fun onNext(t: SongCategoriesResponse?) {
+                        Log.d("DADA","loadFromMemoryFirst:"+t)
+                    }
+                })
 ```
 
 ### 3. 预设置策略
