@@ -4,8 +4,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.webkit.URLUtil;
 
-
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,7 +45,7 @@ public class RxHttp {
     });
 
     //------------------------------Basic GET/POST/DELETE method-------------------------------------
-    public static Observable<ResponseBody> get(@NonNull String url) {
+    public static @NonNull Observable<ResponseBody> get(@NonNull String url) {
         String[] urls = new String[2];
         if (!checkURL(url, urls)) {
             return invalidUrl;
