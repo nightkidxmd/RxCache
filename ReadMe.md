@@ -47,20 +47,11 @@ kotlin:
 ```kotlin
         RxCacheLoaderHelper
                 .loadFromMemoryFirst(this, "http://xxxxx", SongCategoriesResponse::class.java)
-                .subscribe(object:Subscriber<SongCategoriesResponse>(){
-                    override fun onCompleted() {
-                        Log.d("DADA","onCompleted")
-                    }
-
-                    override fun onError(e: Throwable?) {
-                        e?.printStackTrace()
-                        Log.d("DADA","onError:"+e?.message)
-                    }
-
-                    override fun onNext(t: SongCategoriesResponse?) {
-                        Log.d("DADA","loadFromMemoryFirst:"+t)
-                    }
-                })
+                .subscribe(
+                { t -> Log.e("DADA","loadFromMemoryFirst:"+t) }, 
+                {  e->  e?.printStackTrace()
+                   Log.e("DADA","onError:"+e?.message) }, 
+                   {     Log.e("DADA","onCompleted") })
 ```
 
 ### 3. 预设置策略
