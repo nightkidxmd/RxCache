@@ -55,7 +55,7 @@ open class DefaultCacheLoader(private var maxCacheCount: Int = DEFAULT_BUFFER_SI
             ).filter(emptyFilter())!!
 
     override fun <T : Any> loadFromNetwork(observable: Observable<Tuple3<Context, String, Class<T>>>) = observable
-            .filter { t -> t._2.startsWith("http") }
+            .filter { (_, _2, _) -> _2.startsWith("http") }
             .flatMap { (_1, _2, _3) ->
                 RxHttp.get(_2)
                         .retry { integer, throwable ->
