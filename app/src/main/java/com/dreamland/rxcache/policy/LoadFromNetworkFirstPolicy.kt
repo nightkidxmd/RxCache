@@ -12,7 +12,7 @@ import rx.Observable
  * Created by XMD on 2017/6/20.
  */
 class LoadFromNetworkFirstPolicy: ILoaderPolicy {
-    override fun <T> load(tuple3: Tuple3<Context, String, Class<T>>, iCacheLoader: ICacheLoader) = with(iCacheLoader){
+    override fun <T:Any> load(tuple3: Tuple3<Context, String, Class<T>>, iCacheLoader: ICacheLoader) = with(iCacheLoader){
             loadFromNetwork(Observable.just(tuple3))
             .switchIfEmpty(loadFromMemory(Observable.just(tuple3)))
             .switchIfEmpty(loadFromDisk(Observable.just(tuple3)))

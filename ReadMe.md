@@ -21,11 +21,15 @@ class App : Application() {
 }
 ```
 ### 2. 使用
+#### 2.1 文本配置获取(Json格式)
+`默认使用Logansquare`
+>需要在gradle中添加相关支持以及bean文件添加相关注解
+
 java:
 ```java
         RxCacheLoaderHelper.INSTANCE
           .loadFromMemoryFirst(this,"http://xxxx", SongCategoriesResponse.class)
-          .subscribe(new Subscriber<SongCategoriesResponse>() {
+          .subscribe(new Subscriber<Object>() {
             @Override
             public void onCompleted() {
                 Log.d("DADA","onCompleted");
@@ -38,8 +42,9 @@ java:
             }
 
             @Override
-            public void onNext(SongCategoriesResponse songCategoriesResponse) {
-                Log.d("DADA","songCategoriesResponse:"+songCategoriesResponse);
+            public void onNext(Object obj) {
+               SongCategoriesResponse songCategoriesResponse = (SongCategoriesResponse)obj
+               Log.d("DADA","songCategoriesResponse:"+songCategoriesResponse);
             }
         });
 ```
@@ -48,12 +53,44 @@ kotlin:
         RxCacheLoaderHelper
                 .loadFromMemoryFirst(this, "http://xxxxx", SongCategoriesResponse::class.java)
                 .subscribe(
-                { t -> Log.e("DADA","loadFromMemoryFirst:"+t) }, 
+                { t -> if( t is SongCategoriesResponse ) Log.e("DADA","loadFromMemoryFirst:"+t) }, 
                 {  e->  e?.printStackTrace()
                    Log.e("DADA","onError:"+e?.message) }, 
                    {     Log.e("DADA","onCompleted") })
 ```
+#### 2.2 图片获取
+java:
+```java
+        RxCacheLoaderHelper.INSTANCE
+          .loadFromMemoryFirst(this,"http://xxxx", Bitmap.class)
+          .subscribe(new Subscriber<Object>() {
+            @Override
+            public void onCompleted() {
+                Log.d("DADA","onCompleted");
+            }
 
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+                Log.d("DADA","onError:"+e.getMessage());
+            }
+
+            @Override
+            public void onNext(Object obj) {
+                Bitmap bitmap = (Bitmap) obj;
+            }
+        });
+```
+kotlin:
+```kotlin
+        RxCacheLoaderHelper
+                .loadFromMemoryFirst(this, "http://xxxxx", Bitmap::class.java)
+                .subscribe(
+                { t -> if( t is Bitmap ) Log.e("DADA","loadFromMemoryFirst:"+t) }, 
+                {  e->  e?.printStackTrace()
+                   Log.e("DADA","onError:"+e?.message) }, 
+                   {     Log.e("DADA","onCompleted") })
+```
 ### 3. 预设置策略
 #### 3.1 LoadFromMemoryFirstPolicy
 > load顺序 memory, disk , network
