@@ -34,20 +34,20 @@ object RxCacheLoaderHelper {
 
     //----------------------------------------------------------------------------------------------
 
-    @Suppress("UNCHECKED_CAST")
-            /**
+
+    /**
      * @param context
      * @param url
      * @param clazz
      * @param iLoaderPolicy
      * @param iCacheLoader
      */
-
+    @Suppress("UNCHECKED_CAST")
     fun <T : Any> load(context: Context, url: String, clazz: Class<T>,
                        iLoaderPolicy: ILoaderPolicy = defaultCachePolicy,
                        iCacheLoader: ICacheLoader = defaultCacheLoader) =
             iLoaderPolicy.load(makeTuple(context, url, clazz), iCacheLoader).subscribeOn(Schedulers.io())
-                    .flatMap({ t-> Observable.just(t as T)})!!
+                    .flatMap({ t -> Observable.just(t as T) })!!
 
 
     /**
@@ -100,12 +100,13 @@ object RxCacheLoaderHelper {
             = with(imageView) {
         loadFromMemoryFirst(context, url, Bitmap::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ t -> setImageBitmap(t as Bitmap)},
-                        { e -> e.printStackTrace()
+                .subscribe({ t -> setImageBitmap(t) },
+                        { e ->
+                            e.printStackTrace()
                             setImageResource(defaultImageRes)
                         },
                         { })
-    }
+    }!!
 
     //----------------------------------------------------------------------------------------------
     @JvmField
