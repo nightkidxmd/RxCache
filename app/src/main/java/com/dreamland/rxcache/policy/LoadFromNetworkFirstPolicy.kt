@@ -16,6 +16,6 @@ class LoadFromNetworkFirstPolicy: ILoaderPolicy {
             loadFromNetwork(Observable.just(tuple3))
             .switchIfEmpty(loadFromMemory(Observable.just(tuple3)))
             .switchIfEmpty(loadFromDisk(Observable.just(tuple3)))
-            .switchIfEmpty(RxCacheLoaderHelper.NoDataObservable<T>().create())!!
+            .switchIfEmpty(RxCacheLoaderHelper.NoDataObservable().create())!!
     }
 }

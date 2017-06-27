@@ -20,6 +20,6 @@ class LoadFromAllAtTheSameTimePolicy : ILoaderPolicy {
                 }
         )
                 .filter { t -> t != null }
-                .switchIfEmpty(RxCacheLoaderHelper.NoDataObservable<T>().create())!!
+                .switchIfEmpty(RxCacheLoaderHelper.NoDataObservable().create())!!
     }
 }

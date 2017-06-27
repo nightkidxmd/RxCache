@@ -15,5 +15,5 @@ interface ILoaderPolicy {
      * @param iCacheLoader  custom [ICacheLoader]
      * @return
      */
-    fun <T:Any> load(tuple3: Tuple3<Context, String, Class<T>>, iCacheLoader: ICacheLoader): Observable<in Any?>
+    fun <T:Any> load(tuple3: Tuple3<Context, String, Class<T>>, iCacheLoader: ICacheLoader): Observable<in T?>
 }
