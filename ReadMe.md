@@ -1,4 +1,5 @@
 ## RxCacheLoaderHelper
+[TOC]
 ### 1. Initializing
 java:
 ```java
