@@ -1,5 +1,5 @@
 ## RxCacheLoaderHelper
-### 1. 初始化
+### 1. Initializing
 java:
 ```java
 public class App extends Application {
@@ -20,10 +20,11 @@ class App : Application() {
     }
 }
 ```
-### 2. 使用
-#### 2.1 文本配置获取(Json格式)
-`默认使用Logansquare`
->需要在gradle中添加相关支持以及bean文件添加相关注解
+### 2. Usage
+#### 2.1 get text content (Json format)
+`used Logansquare`
+>Need ad logansquare supported<br>
+>[Click to check](https://github.com/bluelinelabs/LoganSquare)
 
 java:
 ```java
@@ -58,7 +59,7 @@ kotlin:
                    Log.e("DADA","onError:"+e?.message) }, 
                    {     Log.e("DADA","onCompleted") })
 ```
-#### 2.2 图片获取
+#### 2.2 Get Image
 java:
 ```java
         RxCacheLoaderHelper.INSTANCE
@@ -69,15 +70,15 @@ kotlin:
         RxCacheLoaderHelper
                 .loadImage(this, "http://xxxxx", imageView,R.drawable.defualt_icon)
 ```
-### 3. 预设置策略
+### 3. Pre-Policy
 #### 3.1 LoadFromMemoryFirstPolicy
-> load顺序 memory, disk , network
+> load sequence: memory, disk , network
 #### 3.2 LoadFromNetworkFirstPolicy
-> load顺序 network, memory, disk
+> load sequence: network, memory, disk
 #### 3.3 LoadFromAllAtTheSameTimePolicy
-> 同时从network,memory,disk获取数据，取值优先级为network>memory>disk
+> load from network,memory,disk at the same time and he priority to pick data is network>memory>disk
 
-### 4. 自定义策略
-> 实现`ILoaderPolicy`，使用RxCacheLoaderHelper$setDefaultCachePolicy 修改默认策略，或者使用load接口传入策略
-### 5. 自定义加载器
-> 实现`ICacheLoader`，使用RxCacheLoaderHelper$setLoaderPolicy修改默认loader(`请在调用init前设置默认loader`)，或者使用load接口传入loader(`注意这钟方法需要自行管理loader`)
+### 4. Custom Made Policy
+> implement `ILoaderPolicy`，and set the policy with RxCacheLoaderHelper$setDefaultCachePolicy to modify default policy or pass your policy when call load
+### 5. Custom Made Loader
+> implement`ICacheLoader`，and modify the default load with RxCacheLoaderHelper$setLoaderPolicy(`call it before init`) or pass your loader when call load(if so you need to manage the loader by yourself)
