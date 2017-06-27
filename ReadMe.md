@@ -62,34 +62,12 @@ kotlin:
 java:
 ```java
         RxCacheLoaderHelper.INSTANCE
-          .loadFromMemoryFirst(this,"http://xxxx", Bitmap.class)
-          .subscribe(new Subscriber<Object>() {
-            @Override
-            public void onCompleted() {
-                Log.d("DADA","onCompleted");
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                e.printStackTrace();
-                Log.d("DADA","onError:"+e.getMessage());
-            }
-
-            @Override
-            public void onNext(Object obj) {
-                Bitmap bitmap = (Bitmap) obj;
-            }
-        });
+                .loadImage(this, "http://xxxxx", imageView,R.drawable.defualt_icon);
 ```
 kotlin:
 ```kotlin
         RxCacheLoaderHelper
-                .loadFromMemoryFirst(this, "http://xxxxx", Bitmap::class.java)
-                .subscribe(
-                { t -> if( t is Bitmap ) Log.e("DADA","loadFromMemoryFirst:"+t) }, 
-                {  e->  e?.printStackTrace()
-                   Log.e("DADA","onError:"+e?.message) }, 
-                   {     Log.e("DADA","onCompleted") })
+                .loadImage(this, "http://xxxxx", imageView,R.drawable.defualt_icon)
 ```
 ### 3. 预设置策略
 #### 3.1 LoadFromMemoryFirstPolicy
