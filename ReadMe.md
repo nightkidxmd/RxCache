@@ -31,7 +31,7 @@ java:
 ```java
         RxCacheLoaderHelper.INSTANCE
           .loadFromMemoryFirst(this,"http://xxxx", SongCategoriesResponse.class)
-          .subscribe(new Subscriber<Object>() {
+          .subscribe(new Subscriber<SongCategoriesResponse>() {
             @Override
             public void onCompleted() {
                 Log.d("DADA","onCompleted");
@@ -44,8 +44,7 @@ java:
             }
 
             @Override
-            public void onNext(Object obj) {
-               SongCategoriesResponse songCategoriesResponse = (SongCategoriesResponse)obj
+            public void onNext(SongCategoriesResponse songCategoriesResponse) {
                Log.d("DADA","songCategoriesResponse:"+songCategoriesResponse);
             }
         });
@@ -55,7 +54,7 @@ kotlin:
         RxCacheLoaderHelper
                 .loadFromMemoryFirst(this, "http://xxxxx", SongCategoriesResponse::class.java)
                 .subscribe(
-                { t -> if( t is SongCategoriesResponse ) Log.e("DADA","loadFromMemoryFirst:"+t) }, 
+                { t ->  Log.e("DADA","loadFromMemoryFirst:"+t) }, 
                 {  e->  e?.printStackTrace()
                    Log.e("DADA","onError:"+e?.message) }, 
                    {     Log.e("DADA","onCompleted") })
