@@ -23,7 +23,7 @@ class App : Application() {
 ### 2. Usage
 #### 2.1 get text content (Json format)
 `used Logansquare`
->Need ad logansquare supported<br>
+>Need add logansquare supported<br>
 >[Click to check](https://github.com/bluelinelabs/LoganSquare)
 
 java:
