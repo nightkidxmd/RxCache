@@ -34,7 +34,8 @@ object RxCacheLoaderHelper {
 
     //----------------------------------------------------------------------------------------------
 
-    /**
+    @Suppress("UNCHECKED_CAST")
+            /**
      * @param context
      * @param url
      * @param clazz
@@ -45,7 +46,8 @@ object RxCacheLoaderHelper {
     fun <T : Any> load(context: Context, url: String, clazz: Class<T>,
                        iLoaderPolicy: ILoaderPolicy = defaultCachePolicy,
                        iCacheLoader: ICacheLoader = defaultCacheLoader) =
-            iLoaderPolicy.load(makeTuple(context, url, clazz), iCacheLoader).subscribeOn(Schedulers.io())!!
+            iLoaderPolicy.load(makeTuple(context, url, clazz), iCacheLoader).subscribeOn(Schedulers.io())
+                    .flatMap({ t-> Observable.just(t as T)})!!
 
 
     /**
