@@ -3,15 +3,13 @@ package com.dreamland.rxcache
 import android.content.Context
 import android.graphics.Bitmap
 import android.widget.ImageView
-import com.dreamland.rxcache.loader.DefaultCacheLoader
-import com.dreamland.rxcache.policy.ILoaderPolicy
-import com.dreamland.rxcache.policy.LoadFromAllAtTheSameTimePolicy
-import com.dreamland.rxcache.policy.LoadFromMemoryFirstPolicy
-import com.dreamland.rxcache.rxutils.Tuple3
-import com.tuyou.tsd.rxcache.policy.LoadFromNetworkFirstPolicy
+import com.dreamland.rxcache.policy.*
+import com.dreamland.rxcache.rxutils.Tuple4
+import com.tuyou.tsd.rxcache.loader.DefaultCacheLoader
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
+import java.net.URI
 
 /**
  * Created by XMD on 2017/6/21.
@@ -37,68 +35,60 @@ object RxCacheLoaderHelper {
 
     /**
      * @param context
-     * @param url
+     * @param uri
      * @param clazz
      * @param iLoaderPolicy
      * @param iCacheLoader
      */
     @Suppress("UNCHECKED_CAST")
-    fun <T : Any> load(context: Context, url: String, clazz: Class<T>,
+    fun <T : Any> load(context: Context, uri: URI?, defaultURI: URI? = null, clazz: Class<T>,
                        iLoaderPolicy: ILoaderPolicy = defaultCachePolicy,
-                       iCacheLoader: ICacheLoader = defaultCacheLoader) =
-            iLoaderPolicy.load(makeTuple(context, url, clazz), iCacheLoader).subscribeOn(Schedulers.io())
+                       iCacheLoader: ICacheLoader = defaultCacheLoader): Observable<T> =
+            iLoaderPolicy.load(makeTuple(context, uri, defaultURI, clazz), iCacheLoader).subscribeOn(Schedulers.io())
                     .flatMap({ t -> Observable.just(t as T) })!!
 
 
     /**
      *
      */
-    fun <T : Any> loadFromMemoryFirst(context: Context, url: String, clazz: Class<T>,
+    fun <T : Any> loadFromMemoryFirst(context: Context, uri: URI?, defaultURI: URI? = null, clazz: Class<T>,
                                       iCacheLoader: ICacheLoader = defaultCacheLoader)
-            = load(context, url, clazz, LoadFromMemoryFirstPolicy(), iCacheLoader)
-
-    /**
-     * compatible with java
-     */
-    fun <T : Any> loadFromMemoryFirst(context: Context, url: String, clazz: Class<T>)
-            = load(context, url, clazz, LoadFromMemoryFirstPolicy())
-
-    fun <T : Any> loadFromNetworkFirst(context: Context, url: String, clazz: Class<T>,
-                                       iCacheLoader: ICacheLoader = defaultCacheLoader)
-            = load(context, url, clazz, LoadFromNetworkFirstPolicy(), iCacheLoader)
-
-    /**
-     * compatible with java
-     */
-    fun <T : Any> loadFromNetworkFirst(context: Context, url: String, clazz: Class<T>)
-            = load(context, url, clazz, LoadFromNetworkFirstPolicy())
+            = load(context, uri, defaultURI, clazz, LoadFromMemoryFirstPolicy(), iCacheLoader)
 
     /**
      *
      */
-    fun <T : Any> loadFromAllAtTheSameTime(context: Context, url: String, clazz: Class<T>,
-                                           iCacheLoader: ICacheLoader = defaultCacheLoader)
-            = load(context, url, clazz, LoadFromAllAtTheSameTimePolicy(), iCacheLoader)
+    fun <T : Any> loadFromNetworkFirst(context: Context, uri: URI?, defaultURI: URI? = null, clazz: Class<T>,
+                                       iCacheLoader: ICacheLoader = defaultCacheLoader)
+            = load(context, uri, defaultURI, clazz, LoadFromNetworkFirstPolicy(), iCacheLoader)
 
     /**
-     * compatible with java
+     *
      */
-    fun <T : Any> loadFromAllAtTheSameTime(context: Context, url: String, clazz: Class<T>)
-            = load(context, url, clazz, LoadFromAllAtTheSameTimePolicy())
+    fun <T : Any> loadFromAllAtTheSameTime(context: Context, uri: URI?, defaultURI: URI? = null, clazz: Class<T>,
+                                           iCacheLoader: ICacheLoader = defaultCacheLoader)
+            = load(context, uri, defaultURI, clazz, LoadFromAllAtTheSameTimePolicy(), iCacheLoader)
+
+    /**
+     *
+     */
+    fun <T : Any> loadDiskOnly(context: Context, uri: URI?, defaultURI: URI? = null, clazz: Class<T>,
+                               iCacheLoader: ICacheLoader = defaultCacheLoader)
+            = load(context, uri, defaultURI, clazz, LoadDiskOnlyPolicy(), iCacheLoader)
 
     /**
      *
      *
      * load image async
      * @param context
-     * @param url
+     * @param uri
      * @param imageView  should added from main looper for imageView$post not useful
      * @param defaultImageRes
      *
      */
-    fun loadImage(context: Context, url: String, imageView: ImageView, defaultImageRes: Int)
+    fun loadImage(context: Context, uri: URI, defaultURI: URI? = null, imageView: ImageView, defaultImageRes: Int)
             = with(imageView) {
-        loadFromMemoryFirst(context, url, Bitmap::class.java)
+        loadFromMemoryFirst(context, uri, defaultURI, Bitmap::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ t -> setImageBitmap(t) },
                         { e ->
@@ -119,5 +109,6 @@ object RxCacheLoaderHelper {
     }
     //----------------------------------------------------------------------------------------------
 
-    private fun <T> makeTuple(context: Context, url: String, clazz: Class<T>) = Tuple3(context, url, clazz)
+    private fun <T> makeTuple(context: Context, uri: URI?, defaultURI: URI?, clazz: Class<T>)
+            = Tuple4(context, uri, defaultURI, clazz)
 }

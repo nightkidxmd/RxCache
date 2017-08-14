@@ -2,8 +2,9 @@ package com.dreamland.rxcache.policy
 
 import android.content.Context
 import com.dreamland.rxcache.ICacheLoader
-import com.dreamland.rxcache.rxutils.Tuple3
+import com.dreamland.rxcache.rxutils.Tuple4
 import rx.Observable
+import java.net.URI
 
 /**
  * Created by XMD on 2017/6/20.
@@ -11,9 +12,9 @@ import rx.Observable
 interface ILoaderPolicy {
     /**
      *
-     * @param tuple3
+     * @param tuple
      * @param iCacheLoader  custom [ICacheLoader]
      * @return
      */
-    fun <T:Any> load(tuple3: Tuple3<Context, String, Class<T>>, iCacheLoader: ICacheLoader): Observable<in T?>
+     fun <T:Any> load(tuple: Tuple4<Context, URI?, URI?, Class<T>>, iCacheLoader: ICacheLoader): Observable<in T?>
 }
