@@ -9,7 +9,7 @@ import java.net.URI
  * Created by XMD on 2017/6/20.
  */
 interface ICacheLoader {
-    fun setMaxMemoryCacheCount(maxCacheCount: Int): ICacheLoader
+    fun setMaxMemoryCacheCount(maxCacheCount: kotlin.Int): ICacheLoader
     fun init(context: Context)
     fun clear(context: Context)
     fun <T : Any> loadFromMemory(observable: Observable<Tuple4<Context, URI?, URI?, Class<T>>>): Observable<in Any?>

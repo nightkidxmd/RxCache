@@ -3,9 +3,9 @@ package com.dreamland.rxcache
 import android.content.Context
 import android.graphics.Bitmap
 import android.widget.ImageView
+import com.dreamland.rxcache.loader.DefaultCacheLoader
 import com.dreamland.rxcache.policy.*
 import com.dreamland.rxcache.rxutils.Tuple4
-import com.tuyou.tsd.rxcache.loader.DefaultCacheLoader
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -14,8 +14,11 @@ import java.net.URI
 /**
  * Created by XMD on 2017/6/21.
  */
-
 object RxCacheLoaderHelper {
+    const val SCHEME_FILE = "file"
+    const val SCHEME_ANDROID_ASSET = "assets"
+    const val SCHEME_HTTP = "http"
+
     var defaultCacheLoader: ICacheLoader = DefaultCacheLoader()
     var defaultCachePolicy: ILoaderPolicy = LoadFromMemoryFirstPolicy()
     fun init(context: Context) {
@@ -86,7 +89,7 @@ object RxCacheLoaderHelper {
      * @param defaultImageRes
      *
      */
-    fun loadImage(context: Context, uri: URI, defaultURI: URI? = null, imageView: ImageView, defaultImageRes: Int)
+    fun loadImage(context: Context, uri: URI?, defaultURI: URI? = null, imageView: ImageView, defaultImageRes: Int)
             = with(imageView) {
         loadFromMemoryFirst(context, uri, defaultURI, Bitmap::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -103,9 +106,8 @@ object RxCacheLoaderHelper {
     val ERROR_NO_DATA = "error_no_data"
 
     class NoDataObservable {
-        fun <T> create(): Observable<T> {
-            return Observable.create { subscriber -> subscriber.onError(Throwable(ERROR_NO_DATA)) }
-        }
+        fun <T> create(): Observable<T> =
+                Observable.create { subscriber -> subscriber.onError(Throwable(ERROR_NO_DATA)) }
     }
     //----------------------------------------------------------------------------------------------
 

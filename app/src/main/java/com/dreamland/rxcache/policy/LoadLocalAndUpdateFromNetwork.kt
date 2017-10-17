@@ -17,7 +17,7 @@ class LoadLocalAndUpdateFromNetwork : ILoaderPolicy {
                 .switchIfEmpty(loadDefault(Observable.just(tuple))),
                 loadFromNetwork(Observable.just(tuple)).flatMap (
                         //拦截信号，这里只是要load后保存，不通知客户
-                        { Observable.create { s: Subscriber<in T> -> s.onCompleted() }},
+                        {Observable.create { s: Subscriber<in T> -> s.onCompleted() }},
                         {null},
                         {null})
         ).switchIfEmpty(RxCacheLoaderHelper.NoDataObservable().create())!!
