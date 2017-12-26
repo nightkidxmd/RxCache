@@ -96,7 +96,9 @@ object RxCacheLoaderHelper {
                 .subscribe({ t -> setImageBitmap(t) },
                         { e ->
                             e.printStackTrace()
-                            setImageResource(defaultImageRes)
+                            if(defaultImageRes != 0){
+                                setImageResource(defaultImageRes)
+                            }
                         },
                         { })
     }!!
